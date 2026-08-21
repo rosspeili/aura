@@ -117,7 +117,7 @@ See [examples/](../examples/README.md) — including [04-sequencer-pipeline](../
 
 ## Next
 
-- [using-aura.md](using-aura.md) — membrane, personas, observers
+- [using-aura.md](using-aura.md) — membrane, example patterns, observers
 - [skillware-integration.md](skillware-integration.md) — Skillware host
 - [concepts.md](concepts.md) — agent, session, sequencer
 - [comparison.md](comparison.md) — vs orchestrators and eval harnesses

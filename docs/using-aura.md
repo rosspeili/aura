@@ -1,16 +1,20 @@
 # Using AURA Harness
 
-How to attach AURA to your agent loop — casual steering, enterprise compliance, or ARPA-native batch runs.
+How to attach AURA to **your** agent loop — whatever shape it takes. AURA is a runtime **membrane** (audit, policy, identity, export) around the body that runs inference and tools. It does not prescribe a product category, team size, or stack.
 
 ---
 
-## Three personas
+## Example usage patterns (illustrative)
 
-| Persona | Goal | Typical setup |
+The table below is **not** a product taxonomy or a checklist of “supported modes.” It shows three **common ways** teams describe their setup when adopting AURA. Mix, skip, or ignore them — use only the pieces you need (`emit()` only, full sequencer + Skillware, registry + batch compare, etc.).
+
+| Pattern (example) | What people often want | One way to wire it |
 |---|---|---|
-| **Casual** | Wrap any custom loop; export for analysis | `agent().session()`, `emit()`, rules optional |
-| **Enterprise** | Skillware skills + prescriptive flows + CI conformance | Sequencer spec, `SkillwareHost`, gates, session export in CI |
-| **ARPA native** | Many agents, compare runs programmatically | Registry + batch sessions + JSONL export API |
+| **Minimal wrap** | Record a custom loop; export for analysis | `agent().session()`, `emit()`, rules optional |
+| **Prescriptive pipeline** | Declared steps, gates, CI conformance | Sequencer spec, `SkillwareHost`, session export in CI |
+| **Multi-agent ops** | Many agents, compare runs programmatically | Registry + batch sessions + JSONL export / `aura compare` |
+
+These rows come from real adoptions (including ARPA-internal batch flows) but **do not define** what AURA is for. The core contract is the same everywhere: open a session, run your body, append spine events, export on close.
 
 AURA is the **harness (coat)**, not the runtime. Your **body** owns the loop; AURA wraps it with **membrane** boundaries and an **audit trail**.
 

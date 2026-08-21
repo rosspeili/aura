@@ -7,7 +7,7 @@
 | Doc | Content |
 |---|---|
 | [getting-started.md](getting-started.md) | Install, example, CLI |
-| [using-aura.md](using-aura.md) | Membrane, personas, SDK |
+| [using-aura.md](using-aura.md) | Membrane, example usage patterns, SDK |
 | [contributing/ai_native_workflow.md](contributing/ai_native_workflow.md) | Agents and operators |
 | [TESTING.md](TESTING.md) | pytest, black, flake8, PR checklist |
 | [../CONTRIBUTING.md](../CONTRIBUTING.md) | Full contributor guide (humans and agents) |
