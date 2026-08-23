@@ -5,6 +5,7 @@ from __future__ import annotations
 import pytest
 
 from aura import agent, ApprovalRequired
+from aura.core.constraints import ConstraintViolation
 from aura.core.conformance import ConformanceEngine
 from aura.hosts.mock import MockSkill
 from aura.hosts.skillware import SkillwareHost
@@ -114,3 +115,47 @@ def test_load_steps():
     steps = load_steps(PIPELINE)
     assert len(steps) == 3
     assert steps[0].step_type == "skill"
+
+
+def test_skill_manifest_merge_blocks_denied_tool(aura_home):
+    ag = agent("manifest-deny")
+    manifest = {"deny_tools": ["delete.db"]}
+    with ag.session(export=False) as run:
+        host = SkillwareHost(run._session)
+        host.register(
+            MockSkill("ops", {"delete.db": lambda a: {"deleted": True}}, manifest=manifest)
+        )
+        with pytest.raises(ConstraintViolation):
+            host.execute("ops", "delete.db", {})
+    kinds = [e.kind for e in run._session.spine.stream()]
+    assert "skill.registered" in kinds
+    assert "constraint.violated" in kinds
+
+
+def test_skill_registered_ingress_payload(aura_home):
+    ag = agent("manifest-bind", agent_ref="acme/bind-test")
+    manifest = {"allow_tools": ["search"]}
+    with ag.session(export=False) as run:
+        host = SkillwareHost(run._session)
+        host.register(MockSkill("research", {"search": lambda a: {}}, manifest=manifest))
+    registered = [e for e in run._session.spine.stream() if e.kind == "skill.registered"]
+    assert len(registered) == 1
+    payload = registered[0].payload
+    assert payload["skill_id"] == "research"
+    assert payload["agent_ref"] == "acme/bind-test"
+    assert payload["manifest_snapshot_hash"]
+
+
+def test_monitor_observer_preset(aura_home):
+    ag = agent(
+        "monitor-preset",
+        observers=[{"preset": "monitor", "id": "loop-monitor", "config": {}}],
+    )
+    with ag.session(export=False) as run:
+        host = SkillwareHost(run._session)
+        host.register(MockSkill("demo", {"ping": lambda a: "pong"}))
+        host.execute("demo", "ping", {})
+        host.execute("demo", "ping", {})
+    kinds = [e.kind for e in run._session.spine.stream()]
+    assert "observer.note" not in kinds  # no repeat threshold by default
+    assert "tool.call" in kinds

@@ -39,9 +39,45 @@ with ag.session() as run:
 
 Every execution emits:
 
-1. `tool.intent` — egress intent
-2. `tool.call` — constraint checks (allow/deny, confirm_before, …)
-3. `tool.result` or `tool.error`
+1. `skill.registered` — when the skill carries a manifest (merged into session rules)
+2. `tool.intent` — egress intent
+3. `tool.call` — constraint checks (allow/deny, confirm_before, …)
+4. `tool.result` or `tool.error`
+
+### Manifest guardrails at bind
+
+Pass optional `manifest` on `MockSkill` (or on live skills) to merge allow/deny/confirm rules into the session constitution at register time:
+
+```python
+MockSkill(
+    "gmail",
+    {"send": lambda args: {"sent": True}},
+    manifest={"deny_tools": ["send.bulk"]},
+)
+```
+
+Emits `skill.registered` on the spine with `manifest_snapshot_hash`, `agent_ref`, and `policy_version`.
+
+### Monitor observer preset
+
+Add to agent profile `observers`:
+
+```yaml
+observers:
+  - preset: monitor
+    id: loop-monitor
+    config:
+      max_identical_intents: 5
+      log_path: .aura/monitor.log
+```
+
+Tracks tool calls and emits `observer.note` events (analytics only — does not block egress).
+
+---
+
+## ToolHost protocol
+
+Any runtime can implement `ToolHost` (`register`, `execute` through egress). `SkillwareHost` is the reference adapter — see `aura.hosts.ToolHost`.
 
 ---
 

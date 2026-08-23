@@ -42,3 +42,23 @@ def ingress_event_payload(
         "agent_ref": profile.agent_ref,
         "policy_version": profile.policy_version,
     }
+
+
+def skill_registered_payload(
+    profile: AgentProfile,
+    *,
+    skill_id: str,
+    manifest_snapshot_hash: str,
+    rule_count: int,
+) -> dict[str, Any]:
+    """Normalized bind-time context when a host registers a skill."""
+    return {
+        "membrane": "ingress",
+        "bind": "skill",
+        "skill_id": skill_id,
+        "manifest_snapshot_hash": manifest_snapshot_hash,
+        "policy_version": profile.policy_version,
+        "agent_ref": profile.agent_ref,
+        "constitution_rule_count": rule_count,
+        "context": build_ingress_context(profile),
+    }

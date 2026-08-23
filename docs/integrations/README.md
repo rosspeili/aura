@@ -10,7 +10,7 @@ Attach AURA to your stack — models, tool runtimes, frameworks, sandboxes.
 | **LangGraph / CrewAI** | planned | Framework wrap examples |
 | **Ollama (local)** | `integrations/ollama/` (planned) | Dev default: `llama3.2:1b` via `.env` |
 | **OpenAI** | `integrations/openai/` (planned) | OpenAI API via `.env` |
-| **Skillware** | `integrations/skillware/` (planned) | Tool runtime; `[skillware]` extra |
+| **Skillware** | [`integrations/skillware/`](../../integrations/skillware/) | Reference ToolHost adapter; `[skillware]` extra |
 
 Copy [`.env.example`](../../.env.example) to `.env` for local Ollama or cloud API keys. Do not commit `.env`.
 
@@ -18,4 +18,4 @@ Core AURA patterns (no specific stack): [`examples/`](../examples/) (after flat 
 
 Tight and tailored coat postures may use Skillware bundles for membrane-level operations (limiters, mail, compression, etc.) — see coat-ops docs when shipped.
 
-See also: [skillware-integration.md](../skillware-integration.md) (relocated to `integrations/skillware/` when that folder ships).
+See also: [skillware-integration.md](../skillware-integration.md) — full guide; capstone script planned in `integrations/skillware/` ([#40](https://github.com/ARPAHLS/aura/issues/40)).

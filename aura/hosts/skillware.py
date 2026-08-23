@@ -2,20 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Any, Protocol
+from typing import Any
 
+from aura.hosts.manifest import manifest_snapshot_hash, merge_manifest_into_rules
+from aura.hosts.protocol import SkillExecutor
 from aura.membrane.egress import guarded_tool_call
-
-
-class SkillExecutor(Protocol):
-    skill_id: str
-
-    def execute(self, tool: str, args: dict[str, Any] | None = None) -> Any: ...
+from aura.membrane.ingress import skill_registered_payload
 
 
 class SkillwareHost:
     """
-    Host adapter for Skillware skills.
+    Reference ToolHost adapter for Skillware skills.
     All tool execution passes through AURA egress (policy + audit).
     """
 
@@ -25,11 +22,17 @@ class SkillwareHost:
 
     def register(self, skill: SkillExecutor) -> None:
         self._skills[skill.skill_id] = skill
+        manifest = getattr(skill, "manifest", None)
+        if isinstance(manifest, dict) and manifest:
+            self._bind_manifest(skill.skill_id, manifest)
 
     def register_by_id(self, skill_id: str, skill: Any) -> None:
         """Wrap a raw Skillware skill instance."""
         wrapped = _wrap_skillware_instance(skill_id, skill)
-        self._skills[skill_id] = wrapped
+        manifest = getattr(skill, "manifest", None)
+        if isinstance(manifest, dict):
+            wrapped.manifest = manifest  # type: ignore[attr-defined]
+        self.register(wrapped)
 
     def execute(
         self,
@@ -66,12 +69,28 @@ class SkillwareHost:
             host.register_by_id(str(skill_id), skill)
         return host
 
+    def _bind_manifest(self, skill_id: str, manifest: dict[str, Any]) -> None:
+        session = self.session
+        session.rules = merge_manifest_into_rules(session.rules, skill_id, manifest)
+        snapshot = manifest_snapshot_hash(skill_id, manifest)
+        session.snapshot_hash = _recompute_snapshot_hash(session)
+        session.emit(
+            "skill.registered",
+            skill_registered_payload(
+                session.profile,
+                skill_id=skill_id,
+                manifest_snapshot_hash=snapshot,
+                rule_count=len(session.rules),
+            ),
+        )
+
 
 def _wrap_skillware_instance(skill_id: str, skill: Any) -> SkillExecutor:
     class _Wrapped:
         def __init__(self) -> None:
             self.skill_id = skill_id
             self._skill = skill
+            self.manifest: dict[str, Any] = {}
 
         def execute(self, tool: str, args: dict[str, Any] | None = None) -> Any:
             payload = dict(args or {})
@@ -82,6 +101,12 @@ def _wrap_skillware_instance(skill_id: str, skill: Any) -> SkillExecutor:
             raise AttributeError(f"Skill {skill_id} has no execute/run method")
 
     return _Wrapped()
+
+
+def _recompute_snapshot_hash(session: Any) -> str:
+    from aura.core.session import _snapshot_hash
+
+    return _snapshot_hash(session.profile, session.rules)
 
 
 def skillware_available() -> bool:

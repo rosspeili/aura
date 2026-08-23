@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`aura paths`** — view paths; **`set-project`** and **`set-storage`** persist settings to YAML.
 - **Interactive paths submenu** — replaces read-only home; agents menu adds **edit** wizard.
 - **Splash polish** — blank line above ASCII logo; smoother Rich truecolor gradient on Windows Terminal.
+- **`ToolHost` protocol** — host-agnostic contract in `aura.hosts`; `SkillwareHost` as reference adapter ([#22](https://github.com/ARPAHLS/aura/issues/22), [#12](https://github.com/ARPAHLS/aura/issues/12)).
+- **Skill manifest merge at bind** — `MockSkill.manifest` / skill manifest merged into session rules; `skill.registered` spine event ([#32](https://github.com/ARPAHLS/aura/issues/32)).
+- **Monitor observer preset** — profile `{ preset: monitor }` for after-call analytics; `observer.note` on spine ([#31](https://github.com/ARPAHLS/aura/issues/31)).
+- **`integrations/skillware/`** — reference adapter index ([#19](https://github.com/ARPAHLS/aura/issues/19)).
 
 ### Changed
 

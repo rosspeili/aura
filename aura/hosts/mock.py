@@ -6,13 +6,18 @@ from typing import Any, Callable
 
 
 class MockSkill:
-    """Minimal skill with a tool → handler map."""
+    """Minimal skill with a tool → handler map and optional manifest guardrails."""
 
     def __init__(
-        self, skill_id: str, handlers: dict[str, Callable[[dict[str, Any]], Any]] | None = None
+        self,
+        skill_id: str,
+        handlers: dict[str, Callable[[dict[str, Any]], Any]] | None = None,
+        *,
+        manifest: dict[str, Any] | None = None,
     ) -> None:
         self.skill_id = skill_id
         self._handlers = dict(handlers or {})
+        self.manifest = dict(manifest or {})
 
     def register(self, tool: str, handler: Callable[[dict[str, Any]], Any]) -> None:
         self._handlers[tool] = handler
