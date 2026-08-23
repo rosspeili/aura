@@ -80,6 +80,12 @@ class Session:
         for entry in self.profile.observers:
             if not isinstance(entry, dict):
                 continue
+            preset = entry.get("preset")
+            if preset == "monitor":
+                from aura.observers.presets.monitor import create_monitor_observer
+
+                self._observers.append(create_monitor_observer(self, entry))
+                continue
             obs_id = entry.get("id")
             if not obs_id:
                 continue

@@ -18,8 +18,8 @@ pytest --cov=aura --cov-report=term-missing
 ## Lint (required before PR)
 
 ```bash
-black aura tests
-flake8 aura tests
+black aura tests integrations examples
+flake8 aura tests integrations examples
 ```
 
 CI expectation: **pytest**, **black**, and **flake8** all pass on `aura/` and `tests/` for every supported Python version. The dependency audit is advisory: `pip-audit` reports findings without blocking the CI gate.
@@ -67,7 +67,16 @@ The workflow also emits a gate job named **`lint-test`** that succeeds only when
 
 - **New behavior needs a test** — extend the closest file (`test_core.py`, `test_v02.py`, `test_v03.py`, `test_cli.py`, or `test_core_gaps.py`).
 - Shared fixtures live in **`tests/conftest.py`** — do not duplicate `aura_home` in test modules.
-- Optional Skillware-only tests use `@pytest.mark.skillware` and `pytest.importorskip("skillware")`.
+- Optional Skillware registry tests: `tests/test_skillware_integration.py` (`@pytest.mark.skillware`) — run in CI via the **skillware-live** job when `[skillware]` is installed ([#36](https://github.com/ARPAHLS/aura/issues/36)).
+- **Real integration tests** live in **`tests/integration/`** (Skillware + Ollama, example 06 live). Default CI **excludes** them (`--ignore=tests/integration`). Run locally:
+
+```bash
+pip install -e ".[integrations]"
+pytest tests/integration/ -v
+```
+
+Integration tests **fail** (not skip) if Ollama or Skillware is missing — that is intentional for the local integration suite.
+- Default CI matrix runs `pytest --ignore=tests/integration` — no deselected or skipped optional tests in the gate.
 - CI prints **`pytest --cov=aura --cov-report=term-missing`** for visibility; there is **no coverage gate** yet.
 
 ## Test layout
@@ -92,7 +101,9 @@ The workflow also emits a gate job named **`lint-test`** that succeeds only when
 | CLI | Version, agent CRUD, run, logs, export, export-otel, compare (`test_cli.py`) |
 | Config / runtime | YAML merge, `run_script`, middleware, session modes (`test_core_gaps.py`) |
 | Compare / OTel | Summary diff incl. `agent_ref` + `hash_chain_valid`, OTel JSONL export (`test_v03.py`, `test_core_gaps.py`) |
-| Examples | Smoke run all `examples/*/main.py` (`test_examples_smoke.py`) |
+| Examples | Smoke run all `examples/*/main.py` (`test_examples_smoke.py`) — includes 05–06 (mock by default) |
+| Skillware | Live registry skills via `test_skillware_integration.py` (CI **skillware-live** job) |
+| Integration | `tests/integration/` — Ollama + Skillware + example 06 (local only) |
 
 ## Pre-PR checklist
 

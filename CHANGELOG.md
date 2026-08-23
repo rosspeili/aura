@@ -20,6 +20,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`aura paths`** — view paths; **`set-project`** and **`set-storage`** persist settings to YAML.
 - **Interactive paths submenu** — replaces read-only home; agents menu adds **edit** wizard.
 - **Splash polish** — blank line above ASCII logo; smoother Rich truecolor gradient on Windows Terminal.
+- **`ToolHost` protocol** — host-agnostic contract in `aura.hosts`; `SkillwareHost` as reference adapter ([#22](https://github.com/ARPAHLS/aura/issues/22), [#12](https://github.com/ARPAHLS/aura/issues/12)).
+- **Skill manifest merge at bind** — `MockSkill.manifest` / skill manifest merged into session rules; `skill.registered` spine event ([#32](https://github.com/ARPAHLS/aura/issues/32)).
+- **Monitor observer preset** — profile `{ preset: monitor }` for after-call analytics; `observer.note` on spine ([#31](https://github.com/ARPAHLS/aura/issues/31)).
+- **`integrations/skillware/`** — reference adapter index ([#19](https://github.com/ARPAHLS/aura/issues/19)).
+- **Skillware registry loader** — `load_registry_skill`, `SkillwareHost.register_registry_skill`, `from_registry` ([#12](https://github.com/ARPAHLS/aura/issues/12)).
+- **Integration scripts** — `reference_tool_host.py` (mock/live), `ollama_skill_loop.py` (Ollama + real skills).
+- **Cloud body loops** — OpenAI, Anthropic, Gemini scripts under `integrations/` with provider READMEs.
+- **Examples 05–06** — skill-type tour and sequencer skill chain (`SKILLWARE_LIVE=1` for registry skills).
+- **Guide** — [docs/guides/aura-on-skillware.md](docs/guides/aura-on-skillware.md), follow-ups in [skillware-follow-ups.md](docs/guides/skillware-follow-ups.md).
+- **`[integrations]` extra** — `skillware`, `ollama`, `openai`, `anthropic`, `google-generativeai` optional deps.
 
 ### Changed
 
