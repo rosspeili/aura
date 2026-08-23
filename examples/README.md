@@ -9,17 +9,18 @@ Runnable demos for AURA Harness.
 | [03-task-mode](03-task-mode/) | Task mode, goal completion |
 | [04-sequencer-pipeline](04-sequencer-pipeline/) | Sequencer + Skillware host (mock skills) |
 | [05-skillware-skill-types](05-skillware-skill-types/) | Three Skillware categories (security, optimization, monitoring) |
-| [06-skillware-sequencer-chain](06-skillware-sequencer-chain/) | Sequencer chain: scan → compress → budget |
+| [06-skillware-sequencer-chain](06-skillware-sequencer-chain/) | Sequencer chain with conditional `when` steps |
+| [07-observer-presets](07-observer-presets/) | Monitor + Break observer presets on ToolHost |
+| [08-emit-only-loop](08-emit-only-loop/) | Loose coat — emit-only, no tool host |
 
 ```bash
 pip install -e ..
 cd examples/01-minimal-loop && python main.py
-cd ../05-skillware-skill-types && python main.py
-cd ../06-skillware-sequencer-chain && python main.py
+cd ../07-observer-presets && python main.py
 ```
 
-Live Skillware registry skills: `$env:SKILLWARE_LIVE="1"` (PowerShell) before running 05 or 06.
+Live registry skills (examples 05–06): `$env:SKILLWARE_LIVE="1"` (PowerShell).
 
 Set `AURA_HOME` to isolate storage during tests.
 
-→ Full Skillware guide: [docs/guides/aura-on-skillware.md](../docs/guides/aura-on-skillware.md)
+→ Capstone checklist: [docs/guides/reference-tool-host-capstone.md](../docs/guides/reference-tool-host-capstone.md)
