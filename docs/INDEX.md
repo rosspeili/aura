@@ -15,7 +15,8 @@
 | [comparison.md](comparison.md) | vs orchestrators, eval harnesses, tracing |
 | [architecture.md](architecture.md) | v0.2 modules |
 | [ROADMAP.md](ROADMAP.md) | Shipped vs deferred |
-| [examples/](../examples/README.md) | Four runnable demos |
+| [examples/](../examples/README.md) | Eight runnable demos (01–08) |
+| [guides/reference-tool-host-capstone.md](guides/reference-tool-host-capstone.md) | ToolHost integration checklist (AURA-first) |
 
 ---
 
@@ -24,7 +25,7 @@
 | Doc | Content |
 |---|---|
 | [integrations/README.md](integrations/README.md) | Pick your stack — models, tools, frameworks |
-| [skillware-integration.md](skillware-integration.md) | Skillware integration (→ `integrations/skillware/` when shipped) |
+| [skillware-integration.md](skillware-integration.md) | Skillware reference adapter — see `integrations/skillware/` |
 | [sequencer.md](sequencer.md) | Prescriptive pipelines, gates, conformance |
 
 Copy [`.env.example`](../.env.example) to `.env` for local Ollama (`llama3.2:1b`) or cloud API keys. Never commit `.env`.

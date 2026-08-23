@@ -1,6 +1,10 @@
-# Skillware + AURA — follow-up issues (suggested)
+# AURA + ToolHost — follow-up issues (suggested)
 
-Track these **after** merging the reference-host / Skillware integration PR. They extend docs, CI, and capstone demos without blocking the core adapter.
+Track these **after** closing the reference ToolHost epic ([#12](https://github.com/ARPAHLS/aura/issues/12), PRs #42 + #43). Skillware remains one live reference adapter — these items extend CI, docs, and demos without changing the core coat.
+
+**Shipped with #12 closure:** `ToolHost` protocol ([#22](https://github.com/ARPAHLS/aura/issues/22)), manifest merge + `skill.registered`, Monitor + Break observer presets ([#34](https://github.com/ARPAHLS/aura/issues/34)), ingress bind enrichment ([#33](https://github.com/ARPAHLS/aura/issues/33)), OTel promoted attributes ([#35](https://github.com/ARPAHLS/aura/issues/35)), capstone guide ([#40](https://github.com/ARPAHLS/aura/issues/40)), examples 05–08 ([#41](https://github.com/ARPAHLS/aura/issues/41) partial), example smoke ([#16](https://github.com/ARPAHLS/aura/issues/16)).
+
+→ Canonical checklist: [reference-tool-host-capstone.md](reference-tool-host-capstone.md)
 
 ---
 
@@ -8,9 +12,9 @@ Track these **after** merging the reference-host / Skillware integration PR. The
 
 | Title | Scope |
 |---|---|
-| **CI Skillware matrix job** ([#36](https://github.com/ARPAHLS/aura/issues/36)) | Install `[skillware]` on runner; run `pytest -m skillware`; optional weekly live job |
-| **Integration script smoke in CI** | Run `reference_tool_host.py` mock path; `examples/05`, `06` without `SKILLWARE_LIVE` |
+| **Integration script smoke in CI** | Run `reference_tool_host.py` mock path; examples 05–08 without `SKILLWARE_LIVE` |
 | **Provider integration opt-in job** | Manual `workflow_dispatch` with secrets for OpenAI/Anthropic/Gemini smoke |
+| **Reusable CI workflow** ([#17](https://github.com/ARPAHLS/aura/issues/17)) | Single workflow definition shared by PR and publish jobs |
 
 ---
 
@@ -18,10 +22,10 @@ Track these **after** merging the reference-host / Skillware integration PR. The
 
 | Title | Scope |
 |---|---|
-| **Flat examples restructure** ([#41](https://github.com/ARPAHLS/aura/issues/41)) | Align paths referenced in docs after examples move |
-| **Capstone: multi-provider comparison** ([#40](https://github.com/ARPAHLS/aura/issues/40)) | One doc page comparing Ollama vs GPT vs Claude vs Gemini with same Skillware chain |
+| **Flat examples restructure** ([#21](https://github.com/ARPAHLS/aura/issues/21)) | Align paths referenced in docs after examples layout change (remainder of [#41](https://github.com/ARPAHLS/aura/issues/41)) |
+| **Multi-provider comparison page** | One doc comparing Ollama vs GPT vs Claude vs Gemini with the same skill chain (extends capstone) |
 | **Skill catalog appendix** | Table of bundled Skillware skills: offline vs API, suggested AURA guardrails |
-| **Video / walkthrough** | 5-minute demo: mock → live → sequencer → export |
+| **Docs sweep** ([#13](https://github.com/ARPAHLS/aura/issues/13), [#14](https://github.com/ARPAHLS/aura/issues/14), [#19](https://github.com/ARPAHLS/aura/issues/19), [#20](https://github.com/ARPAHLS/aura/issues/20)) | Cross-link INDEX, ROADMAP, integration READMEs |
 
 ---
 
@@ -29,14 +33,13 @@ Track these **after** merging the reference-host / Skillware integration PR. The
 
 | Title | Scope |
 |---|---|
+| **Limit observer preset** | Rate/budget circuit breaker (third packaged preset alongside monitor, break) |
 | **Constitution → rules mapper** | Optional transform of Skillware constitution text to AURA machine rules (opt-in) |
-| **Break observer preset** ([#34](https://github.com/ARPAHLS/aura/issues/34)) | Loop detection on repeated tool intents |
-| **OTel principal enrichment** ([#35](https://github.com/ARPAHLS/aura/issues/35)) | Skillware skill id + manifest hash on spans |
 | **`SkillwareHost` async execute** | If Skillware adds async skills, mirror at egress |
 
 ---
 
-## Skillware-specific demos (nice-to-have)
+## Reference demos (nice-to-have)
 
 | Skill | Demo idea |
 |---|---|
@@ -50,4 +53,4 @@ Each should follow the same pattern: **body LLM optional**, **skills at egress**
 
 ## How to use this doc
 
-Copy rows into GitHub issues when ready. Link back to [aura-on-skillware.md](aura-on-skillware.md) as the canonical integration guide.
+Copy rows into GitHub issues when ready. Link back to [reference-tool-host-capstone.md](reference-tool-host-capstone.md) for the AURA-first integration story and [aura-on-skillware.md](aura-on-skillware.md) for the Skillware reference path.

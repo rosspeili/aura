@@ -58,7 +58,7 @@ MockSkill(
 )
 ```
 
-Emits `skill.registered` on the spine with `manifest_snapshot_hash`, `agent_ref`, and `policy_version`.
+Emits `skill.registered` on the spine with `manifest_snapshot_hash`, `agent_ref`, `policy_version`, plus bind context: `host.bind`, `bound_skill_ids`, `session_snapshot_hash` (see [reference-tool-host-capstone.md](guides/reference-tool-host-capstone.md)).
 
 ### Monitor observer preset
 
@@ -75,11 +75,26 @@ observers:
 
 Tracks tool calls and emits `observer.note` events (analytics only — does not block egress).
 
+### Break observer preset
+
+Circuit-breaker **alerts** on repeated identical tool intents — emits `observer.alert` (analytics only; does not block egress):
+
+```yaml
+observers:
+  - preset: break
+    id: loop-break
+    config:
+      max_identical_intents: 3
+      window_seconds: 60
+```
+
+Runnable tour: [examples/07-observer-presets](../../examples/07-observer-presets/).
+
 ---
 
 ## ToolHost protocol
 
-Any runtime can implement `ToolHost` (`register`, `execute` through egress). `SkillwareHost` is the reference adapter — see `aura.hosts.ToolHost`.
+Any runtime can implement `ToolHost` (`register`, `execute` through egress). `SkillwareHost` is the reference adapter — see `aura.hosts.ToolHost` and [reference-tool-host-capstone.md](guides/reference-tool-host-capstone.md).
 
 ---
 
@@ -186,7 +201,22 @@ sequencer:
         args: { to: "team@example.com", subject: "Brief" }
 ```
 
-Runnable example: [examples/04-sequencer-pipeline](../examples/04-sequencer-pipeline/).
+Runnable example: [examples/04-sequencer-pipeline](../examples/04-sequencer-pipeline/). Conditional steps via `when` (prior step result): [examples/06-skillware-sequencer-chain](../examples/06-skillware-sequencer-chain/) · [sequencer.md](sequencer.md).
+
+---
+
+## OTel export
+
+`aura export-otel` maps spine events to span-style JSONL. Promoted resource attributes on spans:
+
+| Attribute | Source |
+|---|---|
+| `aura.agent_ref` | Session agent reference |
+| `aura.policy_version` | Policy version at session open |
+| `aura.principal` | Approver on gated tool calls |
+| `aura.skill_id` | Skill id on tool / registration events |
+
+See [outputs.md](outputs.md) and [reference-tool-host-capstone.md](guides/reference-tool-host-capstone.md).
 
 ---
 

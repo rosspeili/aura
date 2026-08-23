@@ -50,4 +50,12 @@ Use `aura verify chain <path>` to validate an exported JSONL audit trail directl
 
 Summary includes `agent_ref`, `aura_id`, `policy_version`, `snapshot_hash`, and full `agent_ids` trailer.
 
-→ [trust-paths.md](trust-paths.md) · [aura-event.schema.json](../spec/aura-event.schema.json)
+## OTel spans
+
+`aura export-otel` writes `{session_id}.otel.jsonl`. Spans inherit promoted attributes where available:
+
+- `aura.agent_ref`, `aura.policy_version` — session identity
+- `aura.principal` — approver on gated calls
+- `aura.skill_id` — skill on tool and registration events
+
+→ [trust-paths.md](trust-paths.md) · [aura-event.schema.json](../spec/aura-event.schema.json) · [reference-tool-host-capstone.md](guides/reference-tool-host-capstone.md)

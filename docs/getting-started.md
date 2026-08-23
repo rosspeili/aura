@@ -114,7 +114,7 @@ ids:
 
 ## Examples
 
-See [examples/](../examples/README.md) — including [04-sequencer-pipeline](../examples/04-sequencer-pipeline/).
+See [examples/](../examples/README.md) — eight demos (01–08), including [07-observer-presets](../examples/07-observer-presets/) and the ToolHost capstone checklist in [reference-tool-host-capstone.md](guides/reference-tool-host-capstone.md).
 
 ## Next
 

@@ -23,11 +23,14 @@ Use the project **`.venv`** for installs (`pip install -e ".[integrations]"`), n
 | Example | Shows |
 |---|---|
 | [05-skillware-skill-types](../examples/05-skillware-skill-types/) | Three skill categories under AURA |
-| [06-skillware-sequencer-chain](../examples/06-skillware-sequencer-chain/) | Sequencer skill chain |
+| [06-skillware-sequencer-chain](../examples/06-skillware-sequencer-chain/) | Sequencer chain with conditional `when` steps |
+| [07-observer-presets](../examples/07-observer-presets/) | Monitor + Break observer presets |
+| [08-emit-only-loop](../examples/08-emit-only-loop/) | Emit-only coat — no tool host |
 | [04-sequencer-pipeline](../examples/04-sequencer-pipeline/) | Sequencer with mocks |
 
 ## Related docs
 
+- [reference-tool-host-capstone.md](../guides/reference-tool-host-capstone.md) — **360° ToolHost checklist** (AURA-first)
 - [skillware-integration.md](../skillware-integration.md) — API reference
-- [sequencer.md](../sequencer.md) — step model and gates
-- [skillware-follow-ups.md](../guides/skillware-follow-ups.md) — post-merge issue backlog
+- [sequencer.md](../sequencer.md) — step model, gates, and `when`
+- [skillware-follow-ups.md](../guides/skillware-follow-ups.md) — post-#12 backlog

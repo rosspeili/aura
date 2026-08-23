@@ -252,19 +252,22 @@ python examples/06-skillware-sequencer-chain/main.py
 
 | Path | Purpose |
 |---|---|
-| `aura/hosts/skillware_adapter.py` | Registry loader + execute bridge |
+| `aura/hosts/protocol.py` | `ToolHost` protocol (any skill runtime) |
+| `aura/hosts/bind.py` | Bind context for `skill.registered` |
 | `aura/hosts/skillware.py` | `SkillwareHost`, `from_registry()` |
+| `aura/observers/presets/` | Monitor + Break packaged presets |
 | `integrations/skillware/` | Ollama + reference scripts |
-| `integrations/openai|anthropic|google/` | Cloud body loops |
+| `integrations/openai/`, `anthropic/`, `google/` | Cloud body loops |
 | `examples/04-*` | Sequencer with mocks |
-| `examples/05-*`, `06-*` | Real skill patterns |
+| `examples/05-*` … `08-*` | ToolHost tour: skills, chain, observers, emit-only |
 | `docs/skillware-integration.md` | API-focused reference |
+| `docs/guides/reference-tool-host-capstone.md` | AURA-first 360° checklist |
 
 ---
 
-## Follow-up work (post-merge)
+## Follow-up work
 
-See [skillware-follow-ups.md](skillware-follow-ups.md) for suggested GitHub issues: CI Skillware matrix, capstone multi-provider demo, manifest→rules mapper, flat examples restructure, and more.
+See [skillware-follow-ups.md](skillware-follow-ups.md) for post–#12 backlog: flat examples ([#21](https://github.com/ARPAHLS/aura/issues/21)), limit preset, multi-provider comparison page, docs sweep.
 
 ---
 

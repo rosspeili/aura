@@ -40,6 +40,6 @@ flowchart LR
 
 ## Extension surface (roadmap)
 
-Type plugins, named observer presets, HTTP fleet API — see [ROADMAP.md](ROADMAP.md).
+Type plugins, packaged observer presets (monitor, break — see [reference-tool-host-capstone.md](guides/reference-tool-host-capstone.md)), HTTP fleet API — see [ROADMAP.md](ROADMAP.md).
 
 **Principle:** new capabilities emit or subscribe to the spine — core loop unchanged.
