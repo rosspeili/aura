@@ -41,9 +41,7 @@ def require_skillware():
 @pytest.fixture(scope="session")
 def require_ollama():
     if not ollama_api_ok():
-        pytest.fail(
-            "Ollama daemon not reachable — start `ollama serve` and pull llama3.2:1b"
-        )
+        pytest.fail("Ollama daemon not reachable — start `ollama serve` and pull llama3.2:1b")
     pytest.importorskip("ollama")
 
 

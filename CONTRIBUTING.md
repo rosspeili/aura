@@ -110,7 +110,7 @@ Follow the [Code of Conduct](CODE_OF_CONDUCT.md). We welcome autonomous logical 
 ### Style
 
 - **No emojis** in source, docs, commits, or PR titles.
-- **Black** (`black aura tests`) and **Flake8** (`flake8 aura tests`) — see [TESTING.md](docs/TESTING.md).
+- **Black** (`black aura tests integrations examples`) and **Flake8** (`flake8 aura tests integrations examples`) — see [TESTING.md](docs/TESTING.md).
 - Typed Python where the surrounding code uses types; match existing naming and structure.
 
 ### Scope
@@ -126,7 +126,7 @@ Follow the [Code of Conduct](CODE_OF_CONDUCT.md). We welcome autonomous logical 
 
   ```bash
   pytest
-  black aura tests
+  black aura tests integrations examples
   flake8 aura tests
   ```
 
@@ -174,7 +174,7 @@ When in doubt, search the repo for the symbol or term you changed and update doc
 1. **Link an issue** — `Fixes #123` or `Refs #123` in the PR description.
 2. **Branch** — feature branch on your fork, not direct commits to upstream `main`.
 3. **Implement** — follow [Ways to contribute](#ways-to-contribute) and [Ripple effects](#ripple-effects-if-you-change-x-update-y).
-4. **Verify locally** — `pytest`, `black aura tests`, `flake8 aura tests`.
+4. **Verify locally** — `pytest --ignore=tests/integration`, `black aura tests integrations examples`, `flake8 aura tests integrations examples`.
 5. **CHANGELOG** — `[Unreleased]` entry when user-visible.
 6. **PR template** — complete [pull request template](.github/PULL_REQUEST_TEMPLATE.md) honestly.
 7. **Push** — open PR to `ARPAHLS/aura` `main`.

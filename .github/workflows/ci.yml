@@ -41,9 +41,9 @@ jobs:
           pip install pip-audit
           pip-audit
       - name: black
-        run: black --check aura tests
+        run: black --check aura tests integrations examples
       - name: flake8
-        run: flake8 aura tests
+        run: flake8 aura tests integrations examples
       - name: pytest
         run: pytest --cov=aura --cov-report=term-missing --ignore=tests/integration
 

@@ -18,8 +18,8 @@ pytest --cov=aura --cov-report=term-missing
 ## Lint (required before PR)
 
 ```bash
-black aura tests
-flake8 aura tests
+black aura tests integrations examples
+flake8 aura tests integrations examples
 ```
 
 CI expectation: **pytest**, **black**, and **flake8** all pass on `aura/` and `tests/` for every supported Python version. The dependency audit is advisory: `pip-audit` reports findings without blocking the CI gate.
