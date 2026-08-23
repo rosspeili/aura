@@ -144,6 +144,10 @@ def test_skill_registered_ingress_payload(aura_home):
     assert payload["skill_id"] == "research"
     assert payload["agent_ref"] == "acme/bind-test"
     assert payload["manifest_snapshot_hash"]
+    assert payload.get("session_snapshot_hash")
+    assert payload.get("bound_skill_ids") == ["research"]
+    kinds = [e.kind for e in run._session.spine.stream()]
+    assert "host.bind" in kinds
 
 
 def test_monitor_observer_preset(aura_home):
@@ -159,3 +163,69 @@ def test_monitor_observer_preset(aura_home):
     kinds = [e.kind for e in run._session.spine.stream()]
     assert "observer.note" not in kinds  # no repeat threshold by default
     assert "tool.call" in kinds
+
+
+def test_break_observer_preset(aura_home):
+    ag = agent(
+        "break-preset",
+        observers=[{"preset": "break", "id": "loop-break", "config": {"max_identical_intents": 2}}],
+    )
+    with ag.session(export=False) as run:
+        host = SkillwareHost(run._session)
+        host.register(MockSkill("demo", {"ping": lambda a: "pong"}))
+        for _ in range(3):
+            host.execute("demo", "ping", {"n": 1})
+    kinds = [e.kind for e in run._session.spine.stream()]
+    assert "observer.alert" in kinds
+
+
+def test_sequencer_when_skips_step(aura_home):
+    spec = {
+        "steps": [
+            {
+                "id": "scan",
+                "type": "op",
+                "ref": "check",
+                "config": {"op": "scan"},
+            },
+            {
+                "id": "follow",
+                "type": "op",
+                "ref": "next",
+                "depends_on": ["scan"],
+                "when": {"prior_step": "scan", "field": "ok", "equals": True},
+                "config": {"op": "follow"},
+            },
+        ]
+    }
+
+    class _Backend:
+        def __init__(self, session):
+            self.session = session
+
+        def run_skill(self, step):
+            return {}
+
+        def run_op(self, step):
+            if step.id == "scan":
+                return {"ok": False}
+            return {"ok": True}
+
+        def run_prompt(self, step):
+            return {}
+
+        def run_gate(self, step):
+            return {}
+
+    ag = agent("seq-when")
+    with ag.session(export=False) as run:
+        from aura.sequencer.runner import SequencerRunner
+
+        backend = _Backend(run._session)
+        runner = SequencerRunner(run._session, backend=backend, spec=spec)
+        result = runner.run()
+    assert result["completed"] == ["scan", "follow"]
+    state = run._session.state["sequencer"]["follow"]
+    assert state["status"] == "skipped"
+    kinds = [e.kind for e in run._session.spine.stream()]
+    assert "sequencer.step.skipped" in kinds
