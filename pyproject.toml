@@ -58,7 +58,17 @@ Zenodo = "https://doi.org/10.5281/zenodo.22031863"
 [project.optional-dependencies]
 dev = ["pytest>=7.0", "pytest-cov>=4.0", "black>=24.0", "flake8>=7.0"]
 skillware = ["skillware>=0.5.1"]
-integrations = ["skillware>=0.5.1", "ollama>=0.4.0"]
+integrations = [
+    "skillware>=0.5.1",
+    "ollama>=0.4.0",
+    "openai>=1.0",
+    "anthropic>=0.40",
+    "google-generativeai>=0.8",
+]
+openai = ["openai>=1.0"]
+anthropic = ["anthropic>=0.40"]
+google = ["google-generativeai>=0.8"]
+ollama = ["ollama>=0.4.0"]
 
 [project.scripts]
 aura = "aura.cli.main:main"
@@ -72,7 +82,7 @@ testpaths = ["tests"]
 pythonpath = ["."]
 markers = [
     "skillware: requires skillware extra (pip install -e '.[skillware]')",
-    "ollama: requires local Ollama daemon and ollama package (manual / optional CI)",
+    "integration: live stack tests in tests/integration/ (Skillware + Ollama); excluded from default CI",
 ]
 
 [tool.black]

@@ -45,8 +45,8 @@ def _load_env() -> None:
 def _ollama_chat(model: str, messages: list[dict[str, str]]) -> str:
     import ollama
 
-    host = os.environ.get("OLLAMA_HOST") or os.environ.get("OLLAMA_BASE_URL")
-    client = ollama.Client(host=host) if host else ollama
+    base = os.environ.get("OLLAMA_BASE_URL", "http://127.0.0.1:11434").rstrip("/")
+    client = ollama.Client(host=base)
     response = client.chat(model=model, messages=messages)
     return str(response["message"]["content"])
 

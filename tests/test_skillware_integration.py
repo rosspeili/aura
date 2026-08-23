@@ -1,8 +1,13 @@
-"""Integration tests with real Skillware registry skills."""
+"""CI-safe Skillware registry tests (require skillware extra, no Ollama).
+
+Run in CI when the Skillware matrix job is enabled (#36):
+  pip install -e ".[dev,skillware]"
+  pytest tests/test_skillware_integration.py -v
+
+Live Ollama + full-stack tests live in tests/integration/ (excluded from default CI).
+"""
 
 from __future__ import annotations
-
-import os
 
 import pytest
 
@@ -55,48 +60,18 @@ def test_live_injection_firewall_through_host(skillware_installed, aura_home):
     assert "risk_level" in result
 
 
-def _ollama_reachable() -> bool:
-    import urllib.error
-    import urllib.request
-
-    base = os.environ.get("OLLAMA_BASE_URL", "http://127.0.0.1:11434").rstrip("/")
-    url = f"{base}/api/tags"
-    try:
-        with urllib.request.urlopen(url, timeout=3) as response:
-            return 200 <= response.status < 300
-    except (urllib.error.URLError, OSError, TimeoutError):
-        return False
-
-
-@pytest.mark.ollama
-def test_ollama_model_list_smoke(skillware_installed):
-    if not _ollama_reachable():
-        pytest.skip("Ollama daemon not reachable")
-    ollama = pytest.importorskip("ollama")
-    host = os.environ.get("OLLAMA_HOST") or os.environ.get("OLLAMA_BASE_URL")
-    client = ollama.Client(host=host) if host else ollama
-    try:
-        models = client.list()
-    except ConnectionError:
-        pytest.skip("Ollama daemon not reachable")
-    assert models is not None
-
-
-@pytest.mark.ollama
-def test_ollama_firewall_session(skillware_installed, aura_home):
-    if not _ollama_reachable():
-        pytest.skip("Ollama daemon not reachable")
-    pytest.importorskip("ollama")
-    model = os.environ.get("OLLAMA_MODEL", "llama3.2:1b")
-
-    ag = agent("sw-ollama", skills=["security/prompt_injection_firewall"])
+def test_live_token_limiter_through_host(skillware_installed, aura_home):
+    ag = agent("sw-budget", skills=["monitoring/token_limiter"])
     with ag.session(export=False) as run:
-        host = SkillwareHost.from_registry(run._session, ["security/prompt_injection_firewall"])
+        host = SkillwareHost.from_registry(run._session, ["monitoring/token_limiter"])
         result = host.execute(
-            "security/prompt_injection_firewall",
-            "security/prompt_injection_firewall",
-            {"source_text": "test input", "sensitivity": "lenient"},
+            "monitoring/token_limiter",
+            "monitoring/token_limiter",
+            {
+                "action": "check",
+                "task_id": run.session_id,
+                "current_token_count": 500,
+                "max_allowed_tokens": 8000,
+            },
         )
-        run.emit("model.call", {"provider": "ollama", "model": model, "note": "manual integration"})
-
-    assert "is_safe" in result
+    assert result.get("action") in ("CONTINUE", "WARN", "FORCE_TERMINATE")

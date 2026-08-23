@@ -2,6 +2,8 @@
 
 AURA Harness wraps Skillware skills at **egress** — policy, approval, and audit — without owning Skillware's runtime.
 
+**Full guide (recommended):** [guides/aura-on-skillware.md](guides/aura-on-skillware.md) — stack position, skill types, provider loops, sequencer chains, best practices.
+
 ---
 
 ## Position in the stack
@@ -137,7 +139,9 @@ ollama pull llama3.2:1b
 python integrations/skillware/ollama_skill_loop.py
 ```
 
-Ollama provides the **body** LLM turn; Skillware skills run through `SkillwareHost` at egress. CI stays mock-only; optional `@pytest.mark.ollama` tests skip when Ollama is unreachable.
+Ollama provides the **body** LLM turn; Skillware skills run through `SkillwareHost` at egress. Use explicit `OLLAMA_BASE_URL=http://127.0.0.1:11434` on Windows ( bare `ollama.Client()` may not connect).
+
+Real stack tests: `pytest tests/integration/ -v` (excluded from default CI).
 
 ---
 

@@ -26,7 +26,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`integrations/skillware/`** — reference adapter index ([#19](https://github.com/ARPAHLS/aura/issues/19)).
 - **Skillware registry loader** — `load_registry_skill`, `SkillwareHost.register_registry_skill`, `from_registry` ([#12](https://github.com/ARPAHLS/aura/issues/12)).
 - **Integration scripts** — `reference_tool_host.py` (mock/live), `ollama_skill_loop.py` (Ollama + real skills).
-- **`[integrations]` extra** — `skillware` + `ollama` optional deps for local dev scripts.
+- **Cloud body loops** — OpenAI, Anthropic, Gemini scripts under `integrations/` with provider READMEs.
+- **Examples 05–06** — skill-type tour and sequencer skill chain (`SKILLWARE_LIVE=1` for registry skills).
+- **Guide** — [docs/guides/aura-on-skillware.md](docs/guides/aura-on-skillware.md), follow-ups in [skillware-follow-ups.md](docs/guides/skillware-follow-ups.md).
+- **`[integrations]` extra** — `skillware`, `ollama`, `openai`, `anthropic`, `google-generativeai` optional deps.
 
 ### Changed
 

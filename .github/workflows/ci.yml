@@ -45,14 +45,31 @@ jobs:
       - name: flake8
         run: flake8 aura tests
       - name: pytest
-        run: pytest --cov=aura --cov-report=term-missing
+        run: pytest --cov=aura --cov-report=term-missing --ignore=tests/integration
+
+  skillware-live:
+    name: Skillware registry (live)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install with Skillware extra
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev,skillware]"
+      - name: pytest skillware
+        run: pytest tests/test_skillware_integration.py -v
 
   # Stable check name for branch protection (matrix cells are "Python 3.xx").
   ci-ok:
     name: lint-test
-    needs: lint-test
+    needs: [lint-test, skillware-live]
     if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Confirm Python matrix succeeded
-        run: test "${{ needs.lint-test.result }}" = "success"
+        run: |
+          test "${{ needs.lint-test.result }}" = "success"
+          test "${{ needs.skillware-live.result }}" = "success"

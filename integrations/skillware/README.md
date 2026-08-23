@@ -2,16 +2,17 @@
 
 AURA wraps [Skillware](https://github.com/arpahls/skillware) at **egress** — policy, approval, and audit on every tool call. Skillware supplies installable skills; AURA does not replace Skillware's runtime.
 
-## Install
+**Start here:** [docs/guides/aura-on-skillware.md](../../docs/guides/aura-on-skillware.md) — full guide, skill types, sequencer chains, best practices.
 
-```bash
-pip install -e ".[dev,skillware]"   # aura-harness + skillware>=0.5.1
-pip install ollama                  # optional — Ollama body loop only
+## Install (project venv)
+
+```powershell
+.venv\Scripts\activate
+pip install -e ".[dev,skillware]"     # aura-harness + skillware>=0.5.1
+pip install -e ".[integrations]"      # + ollama, openai, anthropic, google clients
 ```
 
-Copy [`.env.example`](../../.env.example) to `.env` for `OLLAMA_MODEL=llama3.2:1b` and local Ollama URL.
-
-Optional full dev stack: `pip install -e ".[dev,integrations]"` (adds `ollama` client).
+Copy [`.env.example`](../../.env.example) to `.env`. See provider sections below.
 
 Verify Skillware:
 
@@ -21,42 +22,33 @@ skillware doctor optimization/prompt_rewriter
 skillware doctor security/prompt_injection_firewall
 ```
 
-## Scripts
+## Scripts in this folder
 
 | Script | Purpose |
 |---|---|
 | [`reference_tool_host.py`](reference_tool_host.py) | Mock (default) or live Skillware via `SKILLWARE_LIVE=1` |
 | [`ollama_skill_loop.py`](ollama_skill_loop.py) | Ollama `llama3.2:1b` + real `prompt_injection_firewall` through AURA |
 
-### Mock (CI-safe, no Skillware registry)
+## Examples (repo root)
 
-```bash
-python integrations/skillware/reference_tool_host.py
-```
+| Example | Purpose |
+|---|---|
+| [05-skillware-skill-types](../../examples/05-skillware-skill-types/) | Security + optimization + monitoring skills |
+| [06-skillware-sequencer-chain](../../examples/06-skillware-sequencer-chain/) | Declarative scan → compress → budget pipeline |
+| [04-sequencer-pipeline](../../examples/04-sequencer-pipeline/) | Sequencer concepts with mocks |
 
-### Live Skillware registry skills
+Set `$env:SKILLWARE_LIVE = "1"` for live registry skills in examples 05 and 06.
 
-Uses bundled offline skills from the installed `skillware` package:
+## Cloud body + Skillware egress
 
-```bash
-# PowerShell
-$env:SKILLWARE_LIVE = "1"
-python integrations/skillware/reference_tool_host.py
-```
+| Provider | README | Script |
+|---|---|---|
+| OpenAI (ChatGPT) | [../openai/README.md](../openai/README.md) | `../openai/skillware_body_loop.py` |
+| Anthropic (Claude) | [../anthropic/README.md](../anthropic/README.md) | `../anthropic/skillware_body_loop.py` |
+| Google Gemini | [../google/README.md](../google/README.md) | `../google/skillware_body_loop.py` |
+| Ollama (local) | this folder | `ollama_skill_loop.py` |
 
-Recommended starter skills (no API keys, offline):
-
-- `optimization/prompt_rewriter` — token compression
-- `security/prompt_injection_firewall` — pre-LLM injection scan
-- `monitoring/token_limiter` — budget gate
-
-### Ollama + Skillware under AURA
-
-```bash
-ollama pull llama3.2:1b
-ollama serve   # if not already running
-python integrations/skillware/ollama_skill_loop.py
-```
+All follow the same pattern: **LLM body turn** + **Skillware skills at AURA egress** + **session export**.
 
 ## Python API
 
@@ -75,24 +67,6 @@ with agent("demo", skills=["security/prompt_injection_firewall"]).session() as r
     )
 ```
 
-Or load explicitly:
-
-```python
-skill = load_registry_skill("optimization/prompt_rewriter")
-host.register(skill)
-host.execute(skill.skill_id, skill.skill_id, {"raw_text": "...", "compression_aggression": "medium"})
-```
-
-## Skillware vs AURA manifest fields
-
-| Skillware manifest | AURA at bind |
-|---|---|
-| `name`, `parameters`, `constitution` | Recorded in `skill.registered` snapshot hash |
-| Optional `guardrails:` block (AURA extension) | Merged into session constraint rules |
-| `constitution` (text) | Audit metadata only — not auto-enforced as machine rules |
-
-Add a `guardrails` key to a skill manifest overlay when you need allow/deny/confirm rules at bind time.
-
 ## Architecture
 
 ```
@@ -102,6 +76,4 @@ Tool call → tool.intent → tool.call (constraints) → Skillware.execute(para
 Session close → JSONL + summary + audit report
 ```
 
-Parent epic: [#12](https://github.com/ARPAHLS/aura/issues/12) · Loader: `aura.hosts.load_registry_skill` · Host: `aura.hosts.SkillwareHost`
-
-Full guide: [`docs/skillware-integration.md`](../../docs/skillware-integration.md)
+Parent epic: [#12](https://github.com/ARPAHLS/aura/issues/12) · API reference: [skillware-integration.md](../../docs/skillware-integration.md)
