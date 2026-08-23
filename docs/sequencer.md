@@ -74,6 +74,23 @@ Each step emits telemetry on the audit spine: `sequencer.step.start`, `sequencer
 | `constitution` | Emits gate event; rules enforced on egress |
 | `budget` | Emits gate event; token rules apply on tool events |
 
+### Conditional steps (`when`)
+
+Skip a step when a **prior step’s result** does not match — emits `sequencer.step.skipped` (order stays auditable):
+
+```yaml
+- id: compress
+  type: skill
+  ref: rewriter
+  depends_on: [scan]
+  when:
+    prior_step: scan
+    field: is_safe
+    equals: true
+```
+
+See [example 06](../examples/06-skillware-sequencer-chain/) and [reference-tool-host-capstone.md](guides/reference-tool-host-capstone.md).
+
 ---
 
 ## SDK

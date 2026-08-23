@@ -13,4 +13,5 @@ class SequencerStep:
     depends_on: list[str] = field(default_factory=list)
     retry: dict[str, Any] = field(default_factory=dict)
     gates: list[str] = field(default_factory=list)
+    when: dict[str, Any] = field(default_factory=dict)
     config: dict[str, Any] = field(default_factory=dict)
