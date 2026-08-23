@@ -93,12 +93,50 @@ class SequencerRunner:
         completed: list[str] = []
         for step in steps:
             self._validate_dependencies(step, completed)
-            result = self._run_step(step)
+            skip_reason = self._skip_reason(step)
+            if skip_reason:
+                result = self._skip_step(step, skip_reason)
+            else:
+                result = self._run_step(step)
             self.session.state.setdefault("sequencer", {})[step.id] = result
             completed.append(step.id)
 
         self.session.emit("sequencer.complete", {"steps": completed})
         return {"completed": completed, "steps": len(completed)}
+
+    def _skip_reason(self, step: SequencerStep) -> str | None:
+        when = step.when
+        if not when:
+            return None
+        prior = when.get("prior_step")
+        field = when.get("field")
+        if not prior or not field:
+            return None
+        state = self.session.state.get("sequencer") or {}
+        prior_result = state.get(prior)
+        if not isinstance(prior_result, dict):
+            return f"prior step {prior!r} has no result"
+        actual = prior_result.get(field)
+        if "equals" in when and actual != when.get("equals"):
+            return f"{field}={actual!r} expected {when.get('equals')!r}"
+        if when.get("truthy") and not actual:
+            return f"{field} is falsy"
+        return None
+
+    def _skip_step(self, step: SequencerStep, reason: str) -> dict[str, Any]:
+        self.session.emit(
+            "sequencer.step.start",
+            {"type": step.step_type, "ref": step.ref, "attempt": 0, "skipped": True},
+            step_id=step.id,
+        )
+        payload = {"status": "skipped", "reason": reason}
+        self.session.emit("sequencer.step.skipped", payload, step_id=step.id)
+        self.session.emit(
+            "sequencer.step.end",
+            {"status": "skipped", "reason": reason},
+            step_id=step.id,
+        )
+        return payload
 
     def _validate_dependencies(self, step: SequencerStep, completed: list[str]) -> None:
         missing = [d for d in step.depends_on if d not in completed]

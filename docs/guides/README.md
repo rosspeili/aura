@@ -4,7 +4,8 @@ Long-form integration and usage guides.
 
 | Guide | Description |
 |---|---|
-| [aura-on-skillware.md](aura-on-skillware.md) | **Skillware + AURA** — stack, skill types, provider loops, sequencer chains, best practices |
-| [skillware-follow-ups.md](skillware-follow-ups.md) | Suggested post-merge GitHub issues for CI, capstone, and demos |
+| [aura-on-skillware.md](aura-on-skillware.md) | Reference adapter deep dive (Skillware as one ToolHost impl) |
+| [reference-tool-host-capstone.md](reference-tool-host-capstone.md) | **360° tool-host checklist** — membrane before/at/after, spine events, runnable paths |
+| [skillware-follow-ups.md](skillware-follow-ups.md) | Suggested follow-up GitHub issues |
 
 See also: [using-aura.md](../using-aura.md), [skillware-integration.md](../skillware-integration.md).

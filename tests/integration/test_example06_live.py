@@ -48,4 +48,7 @@ def test_example06_live_subprocess(require_skillware, aura_home, tmp_path):
     assert payload["llm_allowed"] is False
     assert payload["scan"]["is_safe"] is False
     assert payload["budget"]["action"] == "CONTINUE"
-    assert payload["compress"]["tokens_saved"] >= 0
+    if payload["compress"]:
+        assert payload["compress"].get("tokens_saved", 0) >= 0
+    else:
+        assert payload["verdict"] == "blocked"

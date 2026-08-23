@@ -18,6 +18,7 @@ def load_steps(spec: dict[str, Any] | None) -> list[SequencerStep]:
             depends_on=list(s.get("depends_on") or []),
             retry=dict(s.get("retry") or {}),
             gates=list(s.get("gates") or []),
+            when=dict(s.get("when") or {}),
             config=dict(s.get("config") or {}),
         )
         for s in raw

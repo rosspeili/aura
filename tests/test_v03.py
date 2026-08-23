@@ -98,6 +98,22 @@ def test_otel_span_export():
     assert spans[0]["name"] == "turn.start"
 
 
+def test_otel_promoted_principal_and_policy(aura_home):
+    ag = agent("otel-principal", agent_ref="acme/bot", policy_version="2")
+    with ag.session(export=False) as run:
+        with pytest.raises(ApprovalRequired):
+            run._session.require_approval("req-1", "confirm", {"type": "confirm_before"})
+        run.approve("req-1", principal="operator@corp")
+        run.emit("turn.start", {})
+    events = [e.to_dict() for e in run._session.spine.stream()]
+    spans = events_to_spans(events)
+    approved = next(s for s in spans if s["name"] == "constraint.approved")
+    assert approved["attributes"]["aura.principal"] == "operator@corp"
+    open_span = next(s for s in spans if s["name"] == "session.open")
+    assert open_span["attributes"]["aura.policy_version"] == "2"
+    assert open_span["attributes"]["aura.agent_ref"] == "acme/bot"
+
+
 def test_compare_sessions(aura_home):
     ag = agent("cmp")
     with ag.session() as run1:

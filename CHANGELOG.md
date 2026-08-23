@@ -9,12 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Break observer preset** — `observer.alert` on repeated tool intents ([#34](https://github.com/ARPAHLS/aura/issues/34)).
+- **Sequencer `when`** — conditional step skip with `sequencer.step.skipped` on the spine.
+- **Ingress bind enrichment** — `host.bind`, `bound_skill_ids`, `session_snapshot_hash` on `skill.registered` ([#33](https://github.com/ARPAHLS/aura/issues/33)).
+- **OTel promoted attributes** — `aura.agent_ref`, `aura.policy_version`, `aura.principal`, `aura.skill_id` on spans ([#35](https://github.com/ARPAHLS/aura/issues/35)).
+- **Capstone guide** — [docs/guides/reference-tool-host-capstone.md](docs/guides/reference-tool-host-capstone.md) ([#40](https://github.com/ARPAHLS/aura/issues/40)).
+- **Examples 07–08** — observer presets demo, emit-only loose coat ([#41](https://github.com/ARPAHLS/aura/issues/41)).
 - **`aura verify chain <path>`** — validate an exported JSONL hash chain for CI and archive checks, reporting the first broken `event_id`.
 - **Python 3.13** package classifier — matches the CI matrix and `requires-python = ">=3.10"` ([GH #10](https://github.com/ARPAHLS/aura/issues/10)).
 - **Core test coverage (GH #4)** — config layers, legacy + ULID coexistence, tampered JSONL → audit report `HASH_CHAIN_BROKEN`, constraint allow/deny/token matrix, session mode + project storage paths, compare `agent_ref` / `hash_chain_valid` diffs.
 - **`AuditSpine.from_jsonl()`** — reload spine from disk for verify/tamper checks.
 - **Compare sessions** — `agent_ref.same` and `hash_chain_valid` fields in diff output.
-
 - **`aura agent set`** — update `agent_ref`, purpose, skills, variables, ids, and rules on existing profiles.
 - **`aura config show`** — merged global/project config and resolved registry/sessions paths.
 - **`aura paths`** — view paths; **`set-project`** and **`set-storage`** persist settings to YAML.
@@ -33,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Example 06** — compress step skips when scan `is_safe` is false (sequencer `when`).
 - **PR CI** — `lint-test` now covers Python 3.10–3.13 on Ubuntu (`fail-fast`); publish remains a 3.12 release gate ([GH #10](https://github.com/ARPAHLS/aura/issues/10)).
 - **`AgentRegistry.update_profile`** — registry ref/alias maps stay consistent when `agent_ref` changes.
 - **Global config** — optional persisted `project_dir` in `~/.aura/config.yaml`.

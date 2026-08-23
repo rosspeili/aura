@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from typing import Any
 
+from aura.hosts.bind import record_skill_bind
 from aura.hosts.manifest import manifest_snapshot_hash, merge_manifest_into_rules
 from aura.hosts.protocol import SkillExecutor
 from aura.hosts.skillware_adapter import SkillwareRegistrySkill, load_registry_skill
 from aura.membrane.egress import guarded_tool_call
-from aura.membrane.ingress import skill_registered_payload
 
 
 class SkillwareHost:
@@ -100,14 +100,11 @@ class SkillwareHost:
         session.rules = merge_manifest_into_rules(session.rules, skill_id, manifest)
         snapshot = manifest_snapshot_hash(skill_id, manifest)
         session.snapshot_hash = _recompute_snapshot_hash(session)
-        session.emit(
-            "skill.registered",
-            skill_registered_payload(
-                session.profile,
-                skill_id=skill_id,
-                manifest_snapshot_hash=snapshot,
-                rule_count=len(session.rules),
-            ),
+        record_skill_bind(
+            session,
+            skill_id=skill_id,
+            manifest_snapshot_hash=snapshot,
+            host_kind="skillware",
         )
 
 

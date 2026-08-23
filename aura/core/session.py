@@ -86,6 +86,11 @@ class Session:
 
                 self._observers.append(create_monitor_observer(self, entry))
                 continue
+            if preset == "break":
+                from aura.observers.presets.break_observer import create_break_observer
+
+                self._observers.append(create_break_observer(self, entry))
+                continue
             obs_id = entry.get("id")
             if not obs_id:
                 continue

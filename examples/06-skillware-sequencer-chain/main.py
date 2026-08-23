@@ -27,6 +27,7 @@ PIPELINE = {
             "type": "skill",
             "ref": "optimization/prompt_rewriter",
             "depends_on": ["scan_input"],
+            "when": {"prior_step": "scan_input", "field": "is_safe", "equals": True},
             "config": {
                 "tool": "optimization/prompt_rewriter",
                 "args": {
@@ -127,8 +128,8 @@ def main() -> None:
     prompt = os.environ.get("SKILLWARE_PROMPT", DEFAULT_PROMPT)
 
     ag = agent(
-        "skillware-sequencer-chain",
-        purpose="Scan → compress → budget check (declarative pipeline)",
+        "sequencer-chain-demo",
+        purpose="Declarative tool pipeline with egress audit and conditional steps",
         skills=[
             "security/prompt_injection_firewall",
             "optimization/prompt_rewriter",
@@ -149,6 +150,8 @@ def main() -> None:
         state = run._session.state.get("sequencer", {})
         scan = dict(state.get("scan_input") or {})
         compress = dict(state.get("compress_prompt") or {})
+        if compress.get("status") == "skipped":
+            compress = {}
         verdict = _pipeline_verdict(scan)
 
         run.emit(
