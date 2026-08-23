@@ -50,6 +50,8 @@ def skill_registered_payload(
     skill_id: str,
     manifest_snapshot_hash: str,
     rule_count: int,
+    session_snapshot_hash: str | None = None,
+    bound_skill_ids: list[str] | None = None,
 ) -> dict[str, Any]:
     """Normalized bind-time context when a host registers a skill."""
     return {
@@ -57,6 +59,8 @@ def skill_registered_payload(
         "bind": "skill",
         "skill_id": skill_id,
         "manifest_snapshot_hash": manifest_snapshot_hash,
+        "session_snapshot_hash": session_snapshot_hash,
+        "bound_skill_ids": list(bound_skill_ids or []),
         "policy_version": profile.policy_version,
         "agent_ref": profile.agent_ref,
         "constitution_rule_count": rule_count,
