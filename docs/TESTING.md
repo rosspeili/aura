@@ -67,7 +67,9 @@ The workflow also emits a gate job named **`lint-test`** that succeeds only when
 
 - **New behavior needs a test** — extend the closest file (`test_core.py`, `test_v02.py`, `test_v03.py`, `test_cli.py`, or `test_core_gaps.py`).
 - Shared fixtures live in **`tests/conftest.py`** — do not duplicate `aura_home` in test modules.
-- Optional Skillware-only tests use `@pytest.mark.skillware` and `pytest.importorskip("skillware")`.
+- Optional Skillware-only tests use `@pytest.mark.skillware` and `pytest.importorskip("skillware")` — see `tests/test_skillware_integration.py` (real registry skills from `skillware>=0.5.1`).
+- Optional Ollama tests use `@pytest.mark.ollama` — skip when the daemon is unreachable; run locally with `OLLAMA_MODEL=llama3.2:1b` after `pip install -e ".[integrations]"`.
+- Default CI runs `pytest -m "not ollama"`; Skillware tests require the `skillware` extra on the runner when enabled ([#36](https://github.com/ARPAHLS/aura/issues/36)).
 - CI prints **`pytest --cov=aura --cov-report=term-missing`** for visibility; there is **no coverage gate** yet.
 
 ## Test layout
@@ -93,6 +95,7 @@ The workflow also emits a gate job named **`lint-test`** that succeeds only when
 | Config / runtime | YAML merge, `run_script`, middleware, session modes (`test_core_gaps.py`) |
 | Compare / OTel | Summary diff incl. `agent_ref` + `hash_chain_valid`, OTel JSONL export (`test_v03.py`, `test_core_gaps.py`) |
 | Examples | Smoke run all `examples/*/main.py` (`test_examples_smoke.py`) |
+| Skillware | Live registry skills via `test_skillware_integration.py` (`@pytest.mark.skillware`) |
 
 ## Pre-PR checklist
 

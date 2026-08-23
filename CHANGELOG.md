@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Skill manifest merge at bind** — `MockSkill.manifest` / skill manifest merged into session rules; `skill.registered` spine event ([#32](https://github.com/ARPAHLS/aura/issues/32)).
 - **Monitor observer preset** — profile `{ preset: monitor }` for after-call analytics; `observer.note` on spine ([#31](https://github.com/ARPAHLS/aura/issues/31)).
 - **`integrations/skillware/`** — reference adapter index ([#19](https://github.com/ARPAHLS/aura/issues/19)).
+- **Skillware registry loader** — `load_registry_skill`, `SkillwareHost.register_registry_skill`, `from_registry` ([#12](https://github.com/ARPAHLS/aura/issues/12)).
+- **Integration scripts** — `reference_tool_host.py` (mock/live), `ollama_skill_loop.py` (Ollama + real skills).
+- **`[integrations]` extra** — `skillware` + `ollama` optional deps for local dev scripts.
 
 ### Changed
 
