@@ -132,7 +132,7 @@ Follow the [Code of Conduct](CODE_OF_CONDUCT.md). We welcome autonomous logical 
 
 - Shared fixtures: **`tests/conftest.py`** (`aura_home`, `run_aura` for CLI subprocess tests).
 - Full suite is **64+ tests** across `test_core.py`, `test_core_gaps.py`, `test_v02.py`, `test_v03.py`, `test_cli.py`, `test_examples_smoke.py` — see [TESTING.md](docs/TESTING.md).
-- CI runs on PRs via [`.github/workflows/ci.yml`](.github/workflows/ci.yml) (Python **3.10–3.13** matrix; gate job **`lint-test`**: pytest with coverage report, black, flake8). Each matrix cell also runs `pip-audit` as a warn-only dependency check; its findings or audit errors do not fail the gate or block a PR. See [TESTING.md](docs/TESTING.md) for the exact commands.
+- CI runs on PRs via [`.github/workflows/ci.yml`](.github/workflows/ci.yml) (Python **3.10–3.13** matrix; gate job **`lint-test`**: pytest with coverage report, black, flake8). Steps are defined once in [`.github/workflows/reusable-test.yml`](.github/workflows/reusable-test.yml). Each matrix cell also runs `pip-audit` as a warn-only dependency check; its findings or audit errors do not fail the gate or block a PR. See [TESTING.md](docs/TESTING.md) for the exact commands.
 - Wait for green checks before requesting review.
 
 ### CHANGELOG
@@ -161,7 +161,7 @@ Pure internal refactors with no user-visible effect may omit CHANGELOG; ask on t
 | New core example | `examples/README.md`, optional link from `docs/getting-started.md` |
 | Architecture terminology | `docs/architecture.md`, `README.md` diagrams (keep in sync) |
 | Release / PyPI behavior | `docs/PUBLISHING.md`, `.github/workflows/publish-pypi.yml`, CHANGELOG |
-| PR CI workflow | `.github/workflows/ci.yml`, `docs/TESTING.md`, `CONTRIBUTING.md`; keep publish test job in sync |
+| PR CI workflow | `.github/workflows/ci.yml`, `.github/workflows/reusable-test.yml`, `docs/TESTING.md`, `CONTRIBUTING.md` |
 | Issue template fields | `.github/labels.json` if new label needed; run label sync |
 | Version (maintainer only) | `pyproject.toml`, `aura/__init__.py`, `CITATION.cff`, CHANGELOG release section, Zenodo if archived |
 

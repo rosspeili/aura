@@ -1,7 +1,6 @@
 # PR and main-branch CI — lint and test only (no secrets, no PyPI OIDC).
-# Keep install/lint/test steps in sync with publish-pypi.yml test job until issue #7
-# (reusable workflow) lands. PR CI also matrices Python versions; publish stays
-# single-version as a release gate (see docs/TESTING.md).
+# Lint/test steps live in reusable-test.yml (issue #17). PR CI matrices Python
+# versions; publish stays single-version as a release gate (see docs/TESTING.md).
 
 name: CI
 
@@ -21,46 +20,21 @@ concurrency:
 jobs:
   lint-test:
     name: Python ${{ matrix.python-version }}
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
         python-version: ["3.10", "3.11", "3.12", "3.13"]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install dev dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[dev]"
-      - name: Dependency audit (warn-only)
-        continue-on-error: true
-        run: |
-          pip install pip-audit
-          pip-audit
-      - name: black
-        run: black --check aura tests integrations examples
-      - name: flake8
-        run: flake8 aura tests integrations examples
-      - name: pytest
-        run: pytest --cov=aura --cov-report=term-missing --ignore=tests/integration
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      python-version: ${{ matrix.python-version }}
+      pip-audit: true
 
   skillware-live:
     name: Skillware registry (live)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install with Skillware extra
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[dev,skillware]"
-      - name: pytest skillware
-        run: pytest tests/test_skillware_integration.py -v
+    uses: ./.github/workflows/reusable-test.yml
+    with:
+      python-version: "3.12"
+      skillware: true
 
   # Stable check name for branch protection (matrix cells are "Python 3.xx").
   ci-ok:
