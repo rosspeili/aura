@@ -26,7 +26,15 @@ CI expectation: **pytest**, **black**, and **flake8** all pass on `aura/` and `t
 
 ## Continuous integration
 
-GitHub Actions workflow **[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)** runs on:
+GitHub Actions:
+
+| Workflow | Role |
+|---|---|
+| **[`ci.yml`](../.github/workflows/ci.yml)** | PR + push to `main` — Python matrix, Skillware job, gate `lint-test` |
+| **[`reusable-test.yml`](../.github/workflows/reusable-test.yml)** | **Single source** for install / black / flake8 / pytest (issue [#17](https://github.com/ARPAHLS/aura/issues/17)) |
+| **[`publish-pypi.yml`](../.github/workflows/publish-pypi.yml)** | Release gate — calls `reusable-test.yml` on Python 3.12 before upload |
+
+**[`ci.yml`](../.github/workflows/ci.yml)** runs on:
 
 - every **pull request** targeting `main`
 - every **push** to `main` (post-merge sanity)
@@ -37,15 +45,15 @@ Python matrix on **ubuntu-latest** (`fail-fast: true` — one version failure ca
 python-version: ["3.10", "3.11", "3.12", "3.13"]
 ```
 
-Each cell runs the same steps:
+Each matrix cell invokes **`reusable-test.yml`** with the same steps:
 
 ```bash
 pip install -e ".[dev]"
 pip install pip-audit
 pip-audit                 # warn-only; does not block the CI gate
-black --check aura tests
-flake8 aura tests
-pytest --cov=aura --cov-report=term-missing
+black --check aura tests integrations examples
+flake8 aura tests integrations examples
+pytest --cov=aura --cov-report=term-missing --ignore=tests/integration
 ```
 
 The **Dependency audit (warn-only)** step runs `pip-audit` with
@@ -59,7 +67,9 @@ The workflow also emits a gate job named **`lint-test`** that succeeds only when
 
 **Fork PRs:** the workflow uses `permissions: contents: read` only — no repository secrets, no PyPI OIDC, no deploy environment.
 
-**Publish workflow:** [`.github/workflows/publish-pypi.yml`](../.github/workflows/publish-pypi.yml) runs the same install/lint/test commands on a single Python 3.12 before release upload. The advisory `pip-audit` step belongs to PR CI and is not a release-blocking check. Full 3.10–3.13 coverage is the PR CI matrix; keep the *commands* in sync until a reusable workflow lands (separate CI follow-up issue).
+**Publish workflow:** [`.github/workflows/publish-pypi.yml`](../.github/workflows/publish-pypi.yml) calls **`reusable-test.yml`** on Python 3.12 before release upload (no `pip-audit`; same black/flake8/pytest scope as PR CI). Full 3.10–3.13 coverage is the PR CI matrix.
+
+**Skillware job:** **`skillware-live`** in `ci.yml` calls **`reusable-test.yml`** with `skillware: true` — `pip install -e ".[dev,skillware]"` and `pytest tests/test_skillware_integration.py`.
 
 **Maintainers:** after the first green `lint-test` run on `main`, enable **branch protection** → required status check **`lint-test`**.
 
@@ -107,9 +117,9 @@ Integration tests **fail** (not skip) if Ollama or Skillware is missing — that
 
 ## Pre-PR checklist
 
-1. `pytest`
-2. `black aura tests` (no diff)
-3. `flake8 aura tests`
+1. `pytest --ignore=tests/integration`
+2. `black aura tests integrations examples` (no diff)
+3. `flake8 aura tests integrations examples`
 4. CHANGELOG entry under `[Unreleased]` or release section
 5. Docs updated if behavior or CLI changed
 

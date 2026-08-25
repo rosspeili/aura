@@ -38,6 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Reusable CI workflow** — `.github/workflows/reusable-test.yml` shared by PR CI and PyPI publish; fixes publish drift (flake8 scope, `--ignore=tests/integration`) ([#17](https://github.com/ARPAHLS/aura/issues/17)).
+
 - **Docs sync (post–#12)** — INDEX, ROADMAP, integration guides, follow-ups backlog, OTel/observer sections aligned with PR #43 closure ([#41](https://github.com/ARPAHLS/aura/issues/41), [#22](https://github.com/ARPAHLS/aura/issues/22)).
 
 - **Example 06** — compress step skips when scan `is_safe` is false (sequencer `when`).

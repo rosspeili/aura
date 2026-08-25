@@ -1,0 +1,65 @@
+# Callable lint + test job — single source for PR CI and PyPI publish (issue #17).
+# Callers: ci.yml (matrix + skillware-live), publish-pypi.yml (release gate).
+
+name: Reusable lint and test
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        required: true
+        type: string
+      pip-audit:
+        description: Run pip-audit (warn-only; does not fail the job)
+        required: false
+        type: boolean
+        default: false
+      skillware:
+        description: Install [skillware] and run registry integration tests only
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ "${{ inputs.skillware }}" = "true" ]; then
+            pip install -e ".[dev,skillware]"
+          else
+            pip install -e ".[dev]"
+          fi
+
+      - name: Dependency audit (warn-only)
+        if: inputs.pip-audit == true
+        continue-on-error: true
+        run: |
+          pip install pip-audit
+          pip-audit
+
+      - name: black
+        if: inputs.skillware != true
+        run: black --check aura tests integrations examples
+
+      - name: flake8
+        if: inputs.skillware != true
+        run: flake8 aura tests integrations examples
+
+      - name: pytest (gate suite)
+        if: inputs.skillware != true
+        run: pytest --cov=aura --cov-report=term-missing --ignore=tests/integration
+
+      - name: pytest skillware
+        if: inputs.skillware == true
+        run: pytest tests/test_skillware_integration.py -v
