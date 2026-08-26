@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.4] - 2026-08-26
+
 ### Added
 
 - **Onboarding guide** — [docs/onboarding.md](docs/onboarding.md) step-by-step flow: posture, identity, body wiring, receipt review ([#13](https://github.com/ARPAHLS/aura/issues/13)).
@@ -60,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **`docs/comparison.md`** — membrane vs prompt-harness positioning, session receipt language, shipped scope through v0.3.3.
+- **`docs/comparison.md`** — membrane vs prompt-harness positioning, session receipt language, shipped scope through v0.3.4.
 - **`docs/TESTING.md`**, **`CONTRIBUTING.md`**, **`docs/PUBLISHING.md`** — CI parity, coverage expectations, publish trigger docs.
 
 ### Fixed
@@ -176,7 +178,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - v0.1 is a **runnable kernel**, not the full manifesto stack.
 - Type plugin registry (`aura/core/registry.py`) retained for future adapters; not required to run basic sessions.
 
-[Unreleased]: https://github.com/ARPAHLS/aura/compare/v0.3.3...HEAD
+[Unreleased]: https://github.com/ARPAHLS/aura/compare/v0.3.4...HEAD
+[0.3.4]: https://github.com/ARPAHLS/aura/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/ARPAHLS/aura/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/ARPAHLS/aura/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/ARPAHLS/aura/compare/v0.3.0...v0.3.1

@@ -189,22 +189,25 @@ Orchestrators optimize for **task completion**. Eval harnesses optimize for **qu
 
 ---
 
-## Where AURA is today (v0.3.3)
+## Where AURA is today (v0.3.4)
 
-Honest scope — membrane, sequencer, and identity/audit layers shipped; full zero-intrusion wiring on every transport still growing:
+Honest scope — reference ToolHost coat, membrane presets, and CLI/docs depth shipped since v0.3.3; full zero-intrusion wiring on every transport still growing:
 
-| Shipped (through v0.3) | Roadmap |
+| Shipped (through v0.3.4) | Roadmap |
 | :--- | :--- |
 | Agent registry, sessions, SDK `emit()` | LangGraph / MCP auto-probe |
 | Constraint engine on events | Full I/O normalizer for arbitrary transports |
 | Audit trail (JSONL) + session export + **audit report** | Signed audit packs |
-| **Hash chain** on spine events + compare CLI | Network/shell intercept without host cooperation |
-| **`agent_ref` (ULID)** + policy version on export | Skill manifest rule merge at bind |
-| **Ingress** event + context normalization | Branching / parallel sequencer steps |
-| **Egress** `guarded_tool_call` (Skillware host + mocks) | Broader egress adapters |
-| **Sequencer** — linear steps, gates, retries | Named observer presets (monitor, break, limit) |
-| **Observers** — parallel spine subscribers | Webhooks, enterprise sinks |
-| **OTel exporter** | HTTP fleet API |
+| **Hash chain** on spine events + compare + **`aura verify chain`** | Network/shell intercept without host cooperation |
+| **`agent_ref` (ULID)** + policy version on export | Verified operator identity |
+| **Ingress** + bind enrichment on `skill.registered` | Branching / parallel sequencer steps |
+| **Egress** `guarded_tool_call` + **ToolHost** protocol (Skillware reference coat) | Broader egress adapters |
+| **Sequencer** — linear steps, gates, retries, **`when`** skip | |
+| **Observers** — Monitor + Break presets | Webhooks, enterprise sinks |
+| **Skill manifest merge** at bind | Capability broker |
+| **OTel exporter** + promoted span attributes | HTTP fleet API |
+| **CLI** — `report show`, `agent set`, config/paths, onboarding guide | |
+| **Examples 01–08** (flat layout) + integrations index | Framework host wraps |
 
 The **doctrine** is membrane-first: configure gates, rules, and export invariants at the boundary; keep the cavity a black box. v0.3 adds the **receipt** layer (audit report + integrity chain); v0.2 delivered the first egress path via Skillware/mock hosts per [skillware-integration.md](skillware-integration.md) and [sequencer.md](sequencer.md).
 
