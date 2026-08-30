@@ -192,8 +192,7 @@ Capstone checklist: [reference-tool-host-capstone.md](guides/reference-tool-host
 Not required for first successful run:
 
 - **Goals and schedules** — tracked in [GH #46](https://github.com/ARPAHLS/aura/issues/46)
-- **Run auth / gatekeeper coat** — [GH #50](https://github.com/ARPAHLS/aura/issues/50)
-- **Integrations index polish** — [GH #19](https://github.com/ARPAHLS/aura/issues/19) / [GH #20](https://github.com/ARPAHLS/aura/issues/20)
+- **Run auth / gatekeeper coat** — [GH #56](https://github.com/ARPAHLS/aura/issues/56)
 
 ---
 

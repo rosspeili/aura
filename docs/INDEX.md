@@ -13,7 +13,8 @@ Single entry point for public docs. **Shipped behavior** lives in Tier 1–2; Ti
 | [using-aura.md](using-aura.md) | Membrane, postures, session export, SDK |
 | [concepts.md](concepts.md) | Agent, session, identity, audit |
 | [examples/README.md](../examples/README.md) | Runnable core scripts + integration demos |
-| [integrations/README.md](integrations/README.md) | Pick your stack — Ollama, cloud APIs, Skillware, operator identity |
+| [integrations/README.md](integrations/README.md) | Docs hub — models, tools, frameworks |
+| [../integrations/README.md](../integrations/README.md) | **Stack index** — path and run command per provider |
 | [guides/reference-tool-host-capstone.md](guides/reference-tool-host-capstone.md) | ToolHost checklist (mock → live → Ollama) |
 
 ---

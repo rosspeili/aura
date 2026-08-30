@@ -41,4 +41,4 @@ Live registry skills (examples 05–06): `$env:SKILLWARE_LIVE="1"` (PowerShell).
 
 ## Script excerpts
 
-Each script uses a top module docstring, then section comments for setup, session, emit, and close / expected export. Core examples stay as flat scripts here; stack-specific demos belong under `docs/integrations/`.
+Each script uses a top module docstring, then section comments for setup, session, emit, and close / expected export. Core examples stay as flat scripts here; stack-specific demos belong under [`integrations/`](../integrations/README.md).
