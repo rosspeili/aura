@@ -20,6 +20,8 @@ CLI: `aura report show <session_id>`, `aura report show <session_id> --json`, `a
 
 **Closed session:** After close, `emit`, `approve`, and a second `close()` raise `SessionClosedError`. `session_id` and `trace_id` are fixed at open. `open_snapshot_hash` captures rules + sequencer at open for conformance; `snapshot_hash` in the summary may update when skills bind at runtime.
 
+**Spine events (identity):** When an operator adapter binds, the session emits `identity.bound` after `session.open`. Operator fields appear under `agent_ids.ids.operator` on subsequent events. JSONL retains full fields; summary and OTel apply [redaction defaults](../integrations/identity/README.md).
+
 ---
 
 ## Audit report (summary JSON)
@@ -64,6 +66,7 @@ Summary includes `agent_ref`, `aura_id`, `policy_version`, `snapshot_hash`, and 
 
 - `aura.agent_ref`, `aura.policy_version` — session identity
 - `aura.principal` — approver on gated calls
+- `aura.operator.subject`, `aura.operator.method`, `aura.operator.verified` — session operator when identity adapter bound
 - `aura.skill_id` — skill on tool and registration events
 
 → [trust-paths.md](trust-paths.md) · [aura-event.schema.json](../spec/aura-event.schema.json) · [reference-tool-host-capstone.md](guides/reference-tool-host-capstone.md)
