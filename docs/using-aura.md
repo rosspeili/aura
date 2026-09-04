@@ -15,6 +15,18 @@ How to attach AURA to your agent loop — from lightweight audit logging to pres
 
 See [comparison.md](comparison.md) for loose / tight / tailored framing and competitor positioning.
 
+### Spectrum (preview)
+
+Optional profile block selects autonomy posture — maps to coat metaphor; full enforcement wiring [#27](https://github.com/ARPAHLS/aura/issues/27):
+
+```yaml
+spectrum:
+  level: mid
+  services: [monitor, audit]
+```
+
+`aura agent show` includes `spectrum` when set. Ingress events carry a summary when present.
+
 AURA is the **harness (coat)**, not the runtime. Your **body** owns the loop; AURA wraps it with **membrane** boundaries and an **audit trail**.
 
 ---
@@ -207,7 +219,7 @@ Schema: [sequencer.schema.json](../spec/sequencer.schema.json)
 pip install "aura-harness[skillware]"
 ```
 
-Skillware ≥ 0.5.1 runs inside the body; AURA wraps `execute()` at egress. See [skillware-integration.md](skillware-integration.md).
+Skillware ≥ 0.5.4 (see [skillware-integration.md](skillware-integration.md#version-compatibility)) runs inside the body; AURA wraps `execute()` at egress.
 
 ---
 
